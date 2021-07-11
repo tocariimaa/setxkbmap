@@ -38,6 +38,7 @@
 #include <X11/extensions/XKBfile.h>
 #include <X11/extensions/XKBconfig.h>
 #include <X11/extensions/XKBrules.h>
+#include <X11/extensions/Xrandr.h>
 
 #ifndef PATH_MAX
 #ifdef MAXPATHLEN
@@ -1067,12 +1068,59 @@ applyComponentNames(void)
     return True;
 }
 
+static Bool
+is_xwayland(void)
+{
+    /* Code copied from xisxwayland.c */
+    Bool rc = False;
+    XRRScreenResources *resources = NULL;
+    XRROutputInfo *output = NULL;
+
+    /* There is no definitive way of checking for an XWayland server,
+     * but the two working methods are:
+     * - RandR output names in Xwayland are XWAYLAND0, XWAYLAND1, etc.
+     * - XI devices are xwayland-pointer:10, xwayland-keyboard:11
+     * Let's go with the XRandR check here because it's slightly less
+     * code to write.
+     */
+
+    int event_base, error_base, major, minor;
+    if (!XRRQueryExtension(dpy, &event_base, &error_base) ||
+            !XRRQueryVersion(dpy, &major, &minor)) {
+        /* e.g. Xnest, but definitely not Xwayland */
+        goto out;
+    }
+
+    resources = XRRGetScreenResourcesCurrent(dpy, DefaultRootWindow(dpy));
+    if (!resources) {
+        goto out;
+    }
+
+    output = XRRGetOutputInfo(dpy, resources, resources->outputs[0]);
+    if (!output) {
+        goto out;
+    }
+
+    if (strncmp(output->name, "XWAYLAND", 8) == 0)
+        rc = True;
+
+    XRRFreeOutputInfo(output);
+out:
+    if (resources)
+        XRRFreeScreenResources(resources);
+
+    return rc;
+}
 
 int
 main(int argc, char **argv)
 {
     if ((!parseArgs(argc, argv)) || (!getDisplay(argc, argv)))
         exit(-1);
+
+    if (is_xwayland())
+	    MSG("WARNING: Running setxkbmap against an XWayland server\n");
+
     settings.locale.value = setlocale(LC_ALL, settings.locale.value);
     settings.locale.src = FROM_SERVER;
     VMSG1(7, "locale is %s\n", settings.locale.value);

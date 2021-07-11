@@ -47,7 +47,8 @@ AC_ARG_WITH(xkb-config-root,
 AC_SUBST([XKBCONFIGROOT])
 
 # Checks for pkg-config packages
-PKG_CHECK_MODULES(SETXKBMAP, xkbfile x11)
+# xrandr is needed for the XWayland check
+PKG_CHECK_MODULES(SETXKBMAP, xkbfile x11 xrandr)
 
 # Allow checking code with lint, sparse, etc.
 XORG_WITH_LINT
