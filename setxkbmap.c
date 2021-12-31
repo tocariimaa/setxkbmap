@@ -555,7 +555,7 @@ getDisplay(int argc, char **argv)
         if (settings.display.value == NULL)
             settings.display.value = getenv("DISPLAY");
         if (settings.display.value == NULL)
-            settings.display.value = "default display";
+            settings.display.value = (char *) "default display";
         switch (why)
         {
         case XkbOD_BadLibraryVersion:
@@ -605,9 +605,9 @@ getServerValues(void)
     if (!XkbRF_GetNamesProp(dpy, &tmp, &vd) || !tmp)
     {
         VMSG1(3, "Couldn't interpret %s property\n", _XKB_RF_NAMES_PROP_ATOM);
-        tmp = DFLT_XKB_RULES_FILE;
-        vd.model = DFLT_XKB_MODEL;
-        vd.layout = DFLT_XKB_LAYOUT;
+        tmp = (char *) DFLT_XKB_RULES_FILE;
+        vd.model = (char *) DFLT_XKB_MODEL;
+        vd.layout = (char *) DFLT_XKB_LAYOUT;
         vd.variant = NULL;
         vd.options = NULL;
         VMSG3(3, "Use defaults: rules - '%s' model - '%s' layout - '%s'\n",
@@ -862,7 +862,7 @@ applyRules(void)
         if (settings.rules.src)
             rfName = settings.rules.value;
         else
-            rfName = DFLT_XKB_RULES_FILE;
+            rfName = (char *) DFLT_XKB_RULES_FILE;
 
         if (rfName[0] == '/')
         {
