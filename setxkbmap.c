@@ -177,22 +177,22 @@ static int deviceSpec = XkbUseCoreKbd;
 
 /***====================================================================***/
 
-Bool addToList(list_t *list, const char *newVal);
-void usage(int argc, char **argv);
-void dumpNames(Bool wantRules, Bool wantCNames);
-void trySetString(setting_t * setting, char *newVal, enum source src);
-Bool setOptString(int *arg, int argc, char **argv, setting_t *setting, enum source src);
-int parseArgs(int argc, char **argv);
-Bool getDisplay(int argc, char **argv);
-Bool getServerValues(void);
-FILE *findFileInPath(char *name);
-Bool addStringToOptions(char *opt_str, list_t *opts);
-char *stringFromOptions(char *orig, list_t *newOpts);
-Bool applyConfig(char *name);
-XkbRF_RulesPtr tryLoadRules(char *name, char *locale, Bool wantDesc, Bool wantRules);
-Bool applyRules(void);
-Bool applyComponentNames(void);
-void printKeymap(void);
+static Bool addToList(list_t *list, const char *newVal);
+static void usage(int argc, char **argv);
+static void dumpNames(Bool wantRules, Bool wantCNames);
+static void trySetString(setting_t * setting, char *newVal, enum source src);
+static Bool setOptString(int *arg, int argc, char **argv, setting_t *setting, enum source src);
+static int parseArgs(int argc, char **argv);
+static Bool getDisplay(int argc, char **argv);
+static Bool getServerValues(void);
+static FILE *findFileInPath(char *name);
+static Bool addStringToOptions(char *opt_str, list_t *opts);
+static char *stringFromOptions(char *orig, list_t *newOpts);
+static Bool applyConfig(char *name);
+static XkbRF_RulesPtr tryLoadRules(char *name, char *locale, Bool wantDesc, Bool wantRules);
+static Bool applyRules(void);
+static Bool applyComponentNames(void);
+static void printKeymap(void);
 
 /***====================================================================***/
 
@@ -201,7 +201,7 @@ void printKeymap(void);
     Otherwise newVal is added to the end of the list (if it is not present in the list yet).
 */
 
-Bool
+static Bool
 addToList(list_t *list, const char *newVal)
 {
     register int i;
@@ -237,7 +237,7 @@ addToList(list_t *list, const char *newVal)
 
 /***====================================================================***/
 
-void
+static void
 usage(int argc, char **argv)
 {
     MSG1(
@@ -268,7 +268,7 @@ usage(int argc, char **argv)
     );
 }
 
-void
+static void
 dumpNames(Bool wantRules, Bool wantCNames)
 {
     if (wantRules)
@@ -315,7 +315,7 @@ dumpNames(Bool wantRules, Bool wantCNames)
  *
  * @param which What value is it (one of RULES_NDX, CONFIG_NDX, ...)
  */
-void
+static void
 trySetString(setting_t *setting, char *newVal, enum source src)
 {
     if (setting->value != NULL)
@@ -341,7 +341,7 @@ trySetString(setting_t *setting, char *newVal, enum source src)
     return;
 }
 
-Bool
+static Bool
 setOptString(int *arg, int argc, char **argv, setting_t *setting, enum source src)
 {
     int ndx;
@@ -386,7 +386,7 @@ setOptString(int *arg, int argc, char **argv, setting_t *setting, enum source sr
  * Return True on success or False if an unrecognized option has been
  * specified.
  */
-int
+static int
 parseArgs(int argc, char **argv)
 {
     int i;
@@ -540,7 +540,7 @@ parseArgs(int argc, char **argv)
  *
  * @return True on success or False otherwise.
  */
-Bool
+static Bool
 getDisplay(int argc, char **argv)
 {
     int major, minor, why;
@@ -596,7 +596,7 @@ getDisplay(int argc, char **argv)
  *
  * @return True.
  */
-Bool
+static Bool
 getServerValues(void)
 {
     XkbRF_VarDefsRec vd;
@@ -631,7 +631,7 @@ getServerValues(void)
 
 /***====================================================================***/
 
-FILE *
+static FILE *
 findFileInPath(char *name)
 {
     register int i;
@@ -665,7 +665,7 @@ findFileInPath(char *name)
 
 /***====================================================================***/
 
-Bool
+static Bool
 addStringToOptions(char *opt_str, list_t *opts)
 {
     char *tmp, *str, *next;
@@ -689,7 +689,7 @@ addStringToOptions(char *opt_str, list_t *opts)
 
 /***====================================================================***/
 
-char *
+static char *
 stringFromOptions(char *orig, list_t *newOpts)
 {
     size_t len;
@@ -736,7 +736,7 @@ stringFromOptions(char *orig, list_t *newOpts)
 
 /***====================================================================***/
 
-Bool
+static Bool
 applyConfig(char *name)
 {
     FILE *fp;
@@ -817,7 +817,7 @@ applyConfig(char *name)
     return True;
 }
 
-XkbRF_RulesPtr
+static XkbRF_RulesPtr
 tryLoadRules(char *name, char *locale, Bool wantDesc, Bool wantRules)
 {
     XkbRF_RulesPtr rules = NULL;
@@ -836,7 +836,7 @@ tryLoadRules(char *name, char *locale, Bool wantDesc, Bool wantRules)
  *
  * @return True on success or false otherwise.
  */
-Bool
+static Bool
 applyRules(void)
 {
     int i;
@@ -989,7 +989,7 @@ checkName(char *name, const char *string)
     return ret;
 }
 
-void
+static void
 printKeymap(void)
 {
     MSG("xkb_keymap {\n");
@@ -1006,7 +1006,7 @@ printKeymap(void)
     MSG("};\n");
 }
 
-Bool
+static Bool
 applyComponentNames(void)
 {
     if (!checkName(settings.types.value, "types"))
