@@ -173,7 +173,7 @@ static int deviceSpec = XkbUseCoreKbd;
 #define ERR2(s,a,b)     fprintf(stderr,s,a,b)
 #define ERR3(s,a,b,c)   fprintf(stderr,s,a,b,c)
 
-#define OOM(ptr)        do { if ((ptr) == NULL) { ERR("Out of memory.\n"); exit(-1); } } while (0)
+#define OOM(ptr)        do { if ((ptr) == NULL) { ERR("Out of memory.\n"); exit(1); } } while (0)
 
 /***====================================================================***/
 
@@ -419,7 +419,7 @@ parseArgs(int argc, char **argv)
                 deviceSpec = atoi(argv[i]); /* only allow device IDs, not names */
             } else {
                 usage(argc, argv);
-                exit(-1);
+                exit(1);
             }
         }
         else if (streq(argv[i], "-display"))
@@ -1116,7 +1116,7 @@ int
 main(int argc, char **argv)
 {
     if ((!parseArgs(argc, argv)) || (!getDisplay(argc, argv)))
-        exit(-1);
+        exit(1);
 
     if (is_xwayland())
 	    MSG("WARNING: Running setxkbmap against an XWayland server\n");
@@ -1127,11 +1127,11 @@ main(int argc, char **argv)
     if (dpy)
         getServerValues();
     if (settings.config.value && (!applyConfig(settings.config.value)))
-        exit(-3);
+        exit(3);
     if (!applyRules())
-        exit(-4);
+        exit(4);
     if (!applyComponentNames())
-        exit(-5);
+        exit(5);
     if (dpy)
         XCloseDisplay(dpy);
     exit(0);
