@@ -1090,9 +1090,12 @@ is_xwayland(void)
         /* e.g. Xnest, but definitely not Xwayland */
         goto out;
     }
+    if (major < 1 || (major == 1 && minor < 3)) {
+        goto out;
+    }
 
     resources = XRRGetScreenResourcesCurrent(dpy, DefaultRootWindow(dpy));
-    if (!resources) {
+    if (!resources || resources->noutput < 1) {
         goto out;
     }
 
