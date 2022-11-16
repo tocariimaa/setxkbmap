@@ -1122,7 +1122,7 @@ main(int argc, char **argv)
         exit(1);
 
     if (is_xwayland())
-	    MSG("WARNING: Running setxkbmap against an XWayland server\n");
+	    ERR("WARNING: Running setxkbmap against an XWayland server\n");
 
     settings.locale.value = setlocale(LC_ALL, settings.locale.value);
     settings.locale.src = FROM_SERVER;
