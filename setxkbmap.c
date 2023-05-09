@@ -1076,7 +1076,7 @@ is_xwayland(void)
     XRRScreenResources *resources = NULL;
     XRROutputInfo *output = NULL;
 
-    /* There is no definitive way of checking for an XWayland server,
+    /* There is no definitive way of checking for an Xwayland server,
      * but the two working methods are:
      * - RandR output names in Xwayland are XWAYLAND0, XWAYLAND1, etc.
      * - XI devices are xwayland-pointer:10, xwayland-keyboard:11
@@ -1122,7 +1122,7 @@ main(int argc, char **argv)
         exit(1);
 
     if (is_xwayland())
-	    ERR("WARNING: Running setxkbmap against an XWayland server\n");
+	    ERR("WARNING: Running setxkbmap against an Xwayland server\n");
 
     settings.locale.value = setlocale(LC_ALL, settings.locale.value);
     settings.locale.src = FROM_SERVER;
