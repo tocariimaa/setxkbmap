@@ -1,5 +1,5 @@
 .\"
-.TH SETXKBMAP __appmansuffix__ __xorgversion__
+.TH SETXKBMAP __appmansuffix__ 2021-07-12 __xorgversion__
 .SH NAME
 setxkbmap
 \- set the keyboard using the X Keyboard Extension
@@ -20,7 +20,8 @@ command maps the keyboard to use the layout determined by the options
 specified on the command line.
 .P
 An XKB keymap is constructed from a number of components which are compiled
-only as needed.  The source for all of the components can be found in
+only as needed.
+The source for all of the components can be found in
 .IR __xkbconfigroot__ .
 .SH OPTIONS
 .TP 8
@@ -34,8 +35,8 @@ keyboard to be used.
 .TP 8
 .B \-device \fIdevice\fP
 Specifies the numeric device id of the input device to be updated with
-the new keyboard layout. If not specified, the core keyboard device of
-the X server is updated.
+the new keyboard layout.
+If not specified, the core keyboard device of the X server is updated.
 .TP 8
 .B \-display \fIdisplay\fP
 Specifies the display to be updated with the new keyboard layout.
@@ -45,7 +46,7 @@ Specifies the name of the geometry component used to construct
 a keyboard layout.
 .TP 8
 .B \-help
-Prints a message describing the valid input to \fIsetxkbmap\fP.
+Prints a message describing the valid input to \fBsetxkbmap\fP.
 .TP 8
 .B \-I \fIdirectory\fP
 Adds a directory to the list of directories to be used to search for
@@ -61,29 +62,32 @@ a keyboard layout.
 .TP 8
 .B \-layout \fIname\fP
 Specifies the name of the layout used to determine the components which
-make up the keyboard description. The \fI-layout\fP option may only be used
-once. Multiple layouts can be specified as a comma-separated list.
+make up the keyboard description.
+The \fB-layout\fP option may only be used once.
+Multiple layouts can be specified as a comma-separated list.
 .TP 8
 .B \-model \fIname\fP
 Specifies the name of the keyboard model used to determine the components
-which make up the keyboard description.  Only one model may be specified
-on the command line.
+which make up the keyboard description.
+Only one model may be specified on the command line.
 .TP 8
 .B \-option \fIname\fP
 Specifies the name of an option to determine the components which make up
-the keyboard description;  multiple options may be specified, one per
-\fI-option\fP flag. Note that
+the keyboard description;
+multiple options may be specified, one per \fB-option\fP flag.
+Note that
 .B setxkbmap
 adds options specified in the command line to the options that were set
-before (as saved in root window properties). If you want to replace all
-previously specified options, use the \fI-option\fP flag with an empty
-argument first.
+before (as saved in root window properties).
+If you want to replace all previously specified options,
+use the \fB-option\fP flag with an empty argument first.
 .TP 8
 .B \-print
 With this option \fBsetxkbmap\fP just prints component names in a format
-acceptable by \fBxkbcomp\fP (an XKB keymap compiler) and exits. The option
-can be used for tests instead of a verbose option and in cases when one needs
-to run both the \fBsetxkbmap\fP and the \fBxkbcomp\fP in chain (see below).
+acceptable by \fBxkbcomp\fP (an XKB keymap compiler) and exits.
+The option can be used for tests instead of a verbose option and
+in cases when one needs to run both the
+\fBsetxkbmap\fP and the \fBxkbcomp\fP in chain (see below).
 .TP 8
 .B \-query
 With this option \fBsetxkbmap\fP just prints the current rules, model,
@@ -106,15 +110,16 @@ a keyboard layout.
 .TP 8
 .B \-variant \fIname\fP
 Specifies which variant of the keyboard layout should be used to determine
-the components which make up the keyboard description. The \fI-variant\fP
-option may only be used once. Multiple variants can be specified as a
-comma-separated list and will be matched with the layouts specified with
-\fI-layout\fP.
+the components which make up the keyboard description.
+The \fB-variant\fP option may only be used once.
+Multiple variants can be specified as a comma-separated list
+and will be matched with the layouts specified with \fB-layout\fP.
 .TP 8
-.B \-verbose|\-v [\fIlevel\fP]
-Specifies level of verbosity in output messages.  Valid levels range from
-0 (least verbose) to 10 (most verbose).  The default verbosity level is 5.
-If no level is specified, each \fI-v\fP or \fI-verbose\fP flag raises the
+.B \-verbose\fR|\fP\-v \fR[\fIlevel\fP]\fP
+Specifies level of verbosity in output messages.
+Valid levels range from 0 (least verbose) to 10 (most verbose).
+The default verbosity level is 5.
+If no level is specified, each \fB-v\fP or \fB-verbose\fP flag raises the
 level by 1.
 .TP 8
 .B \-version
@@ -128,17 +133,17 @@ configuration files according to files that are on the client-side computer,
 then sends these file names to the server where \fBxkbcomp\fP has to
 compose a complete keyboard map using files which the server has.
 Thus if the sets of files differ in some way, the names that
-\fBsetxkbmap\fP generates can be unacceptable on the server side.  You can
-solve this problem by running the \fBxkbcomp\fP on the client side too.
-With the \fI-print\fP option \fBsetxkbmap\fP just prints the file names
+\fBsetxkbmap\fP generates can be unacceptable on the server side.
+You can solve this problem by running the \fBxkbcomp\fP on the client side too.
+With the \fB-print\fP option \fBsetxkbmap\fP just prints the file names
 in an appropriate format to its stdout and this output can be piped
-directly to the \fBxkbcomp\fP input.  For example, the command
-
+directly to the \fBxkbcomp\fP input.
+For example, the command
+.sp
 \fBsetxkbmap us -print | xkbcomp - $DISPLAY\fP
-
+.sp
 makes both steps run on the same (client) machine and loads a keyboard map into
 the server.
-
 .SH "XWAYLAND"
 Xwayland is an X server that uses a Wayland Compositor as backend.
 Xwayland acts as translation layer between the X protocol and the Wayland
@@ -147,10 +152,10 @@ Compositor.
 .PP
 Changing the keymap with \fBsetxkbmap\fP is not supported by Xwayland.
 In most instances, using \fBsetxkbmap\fP on Xwayland is indicative of a
-bug in a shell script and \fBsetxkbmap\fP will print a warning. Use the Wayland
-Compositor's native XKB configuration methods instead.
-
-.SH SEE ALSO
-xkbcomp(__appmansuffix__), xkeyboard-config(__miscmansuffix__)
+bug in a shell script and \fBsetxkbmap\fP will print a warning.
+Use the Wayland Compositor's native XKB configuration methods instead.
 .SH FILES
 .I __xkbconfigroot__
+.SH SEE ALSO
+.BR xkbcomp (__appmansuffix__),
+.BR xkeyboard-config (__miscmansuffix__)
