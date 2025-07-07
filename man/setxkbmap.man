@@ -91,7 +91,7 @@ in cases when one needs to run both the
 .TP 8
 .B \-query
 With this option \fBsetxkbmap\fP just prints the current rules, model,
-layout, variant, and options, then exits.
+layout, active layout, variant, and options, then exits.
 .TP 8
 .B \-rules \fIfile\fP
 Specifies the name of the rules file used to resolve the requested layout
