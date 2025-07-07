@@ -105,6 +105,7 @@ struct settings {
     setting_t locale;    /* Machine's locale */
     setting_t model;
     setting_t layout;
+    setting_t active;    /* active layout */
     setting_t variant;
     setting_t keycodes;
     setting_t types;
@@ -117,19 +118,20 @@ struct settings {
 typedef struct settings settings_t;
 
 static settings_t settings = {
-    { "rules file",         NULL, UNDEFINED },
-    { "config file",        NULL, UNDEFINED },
-    { "X display",          NULL, UNDEFINED },
-    { "locale",             NULL, UNDEFINED },
-    { "keyboard model",     NULL, UNDEFINED },
-    { "keyboard layout",    NULL, UNDEFINED },
-    { "layout variant",     NULL, UNDEFINED },
-    { "keycodes",           NULL, UNDEFINED },
-    { "types",              NULL, UNDEFINED },
-    { "compatibility map",  NULL, UNDEFINED },
-    { "symbols",            NULL, UNDEFINED },
-    { "geometry",           NULL, UNDEFINED },
-    { "keymap",             NULL, UNDEFINED }
+    { "rules file",              NULL, UNDEFINED },
+    { "config file",             NULL, UNDEFINED },
+    { "X display",               NULL, UNDEFINED },
+    { "locale",                  NULL, UNDEFINED },
+    { "keyboard model",          NULL, UNDEFINED },
+    { "keyboard layout",         NULL, UNDEFINED },
+    { "keyboard active layout",  NULL, UNDEFINED },
+    { "layout variant",          NULL, UNDEFINED },
+    { "keycodes",                NULL, UNDEFINED },
+    { "types",                   NULL, UNDEFINED },
+    { "compatibility map",       NULL, UNDEFINED },
+    { "symbols",                 NULL, UNDEFINED },
+    { "geometry",                NULL, UNDEFINED },
+    { "keymap",                  NULL, UNDEFINED }
 };
 
 static XkbConfigRtrnRec cfgResult;
@@ -280,6 +282,8 @@ dumpNames(Bool wantRules, Bool wantCNames)
             MSG1("model:      %s\n", settings.model.value);
         if (settings.layout.value)
             MSG1("layout:     %s\n", settings.layout.value);
+        if (settings.active.value)
+            MSG1("active:     %s\n", settings.active.value);
         if (settings.variant.value)
             MSG1("variant:    %s\n", settings.variant.value);
         if (options.item)
@@ -590,6 +594,29 @@ getDisplay(int argc, char **argv)
 
 /***====================================================================***/
 
+/* Retrieve the current active layout. Expects `layoutdesc` to be a comma separated list of
+ * layout names, or a single layout name.
+ */
+static void
+getActiveLayout(setting_t *active, const char *layoutdesc, enum source src)
+{
+    XkbStateRec state;
+    XkbGetState(dpy, XkbUseCoreKbd, &state); /* TODO check failure? */
+
+    char *lydesc = strdup(layoutdesc);
+    char *cur = strtok(lydesc, ",");
+    /* state.group holds the index of the active layout in layoutdesc */
+    for (int i = 0; i < state.group; ++i) {
+        if (!(cur = strtok(NULL, ","))) {
+            ERR("couldn't get active layout");
+            exit(1);
+        }
+    }
+
+    active->src = src;
+    active->value = cur;
+}
+
 /**
  * Retrieve xkb values from the XKB_RULES_NAMES property and store their
  * contents in svValues.
@@ -619,7 +646,10 @@ getServerValues(void)
     if (vd.model)
         trySetString(&settings.model, vd.model, FROM_SERVER);
     if (vd.layout)
+    {
         trySetString(&settings.layout, vd.layout, FROM_SERVER);
+        getActiveLayout(&settings.active, vd.layout, FROM_SERVER);
+    }
     if (vd.variant)
         trySetString(&settings.variant, vd.variant, FROM_SERVER);
     if ((vd.options) && (!clearOptions))
