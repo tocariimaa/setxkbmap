@@ -207,7 +207,7 @@ static void printKeymap(void);
 static Bool
 addToList(list_t *list, const char *newVal)
 {
-    register int i;
+    int i;
 
     if ((!newVal) || (!newVal[0]))
     {
@@ -665,7 +665,7 @@ getServerValues(void)
 static FILE *
 findFileInPath(char *name)
 {
-    register int i;
+    int i;
     char buf[PATH_MAX];
     FILE *fp;
 
